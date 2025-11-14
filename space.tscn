@@ -1,0 +1,86 @@
+[gd_scene load_steps=11 format=3 uid="uid://cf5bdg5jw1tmi"]
+
+[ext_resource type="Script" uid="uid://b7wd3xcvein64" path="res://player.gd" id="1_d5lh8"]
+[ext_resource type="PackedScene" uid="uid://bveu135dey1hq" path="res://actors/gato.glb" id="2_81phd"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_81phd"]
+sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+
+[sub_resource type="Sky" id="Sky_qtpbo"]
+sky_material = SubResource("ProceduralSkyMaterial_81phd")
+
+[sub_resource type="Environment" id="Environment_rxlph"]
+background_mode = 2
+sky = SubResource("Sky_qtpbo")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_ulv8f"]
+size = Vector2(15, 15)
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_d5lh8"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_81phd"]
+size = Vector3(7.55, 2.795, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_qtpbo"]
+size = Vector3(7.57, 2.8, 1)
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_d5lh8"]
+radius = 0.44921875
+height = 2.0976563
+
+[node name="space" type="Node3D"]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_rxlph")
+
+[node name="map" type="Node3D" parent="."]
+
+[node name="floor" type="StaticBody3D" parent="map"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="map/floor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.009752274, 0, 0)
+mesh = SubResource("PlaneMesh_ulv8f")
+skeleton = NodePath("../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="map/floor"]
+shape = SubResource("WorldBoundaryShape3D_d5lh8")
+
+[node name="parede" type="StaticBody3D" parent="map"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4102769, -2.1377087)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="map/parede"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.1426563)
+mesh = SubResource("BoxMesh_81phd")
+skeleton = NodePath("../..")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="map/parede"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -2.1445675)
+shape = SubResource("BoxShape3D_qtpbo")
+
+[node name="player" type="CharacterBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1343763, 0)
+collision_layer = 2
+script = ExtResource("1_d5lh8")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="player"]
+transform = Transform3D(1, 0, 0, 0, 0.99999994, 0, 0, 0, 0.99999994, 0, -0.098664045, 0)
+shape = SubResource("CapsuleShape3D_d5lh8")
+
+[node name="camera_pivot" type="Node3D" parent="player"]
+transform = Transform3D(1, 0, 0, 0, 0.9659258, 0.25881904, 0, -0.25881904, 0.9659258, 0, 1.8738751, 0)
+
+[node name="SpringArm3D" type="SpringArm3D" parent="player/camera_pivot"]
+spring_length = 4.5
+
+[node name="camera" type="Camera3D" parent="player/camera_pivot/SpringArm3D"]
+transform = Transform3D(1, 0, 0, 0, 1.0000001, 0, 0, 0, 1.0000001, 0, 0, 0)
+
+[node name="dino" parent="player" instance=ExtResource("2_81phd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.1167645, 0)
