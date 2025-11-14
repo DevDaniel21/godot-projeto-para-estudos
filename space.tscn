@@ -82,5 +82,5 @@ spring_length = 4.5
 [node name="camera" type="Camera3D" parent="player/camera_pivot/SpringArm3D"]
 transform = Transform3D(1, 0, 0, 0, 1.0000001, 0, 0, 0, 1.0000001, 0, 0, 0)
 
-[node name="dino" parent="player" instance=ExtResource("2_81phd")]
+[node name="character" parent="player" instance=ExtResource("2_81phd")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.1167645, 0)

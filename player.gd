@@ -1,18 +1,29 @@
 extends CharacterBody3D
 
 
-const SPEED = 5.0
-const JUMP_VELOCITY = 4.5
+var SPEED = 5.0
+var JUMP_VELOCITY = 4.5
 const ACCELERATION = 15
 
 @onready var camera_pivot: Node3D = $camera_pivot
 @onready var camera: Camera3D = $camera_pivot/SpringArm3D/camera
-@onready var dino_skin: Node3D = $dino
+@onready var character_skin: Node3D = $character
 
 var mouse_sensitivity : float = 0.15
 var camera_rotation : Vector2 = Vector2.ZERO
 var last_movement_dir := Vector3.BACK
+var can_jump := true
 var is_jumping
+
+func handle_press_skills():
+	if Input.is_action_just_pressed("first_skill"):
+		can_jump = false
+		#usar_skill_1()
+
+
+
+
+
 
 func _ready() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -24,12 +35,14 @@ func _unhandled_input(event: InputEvent) -> void:
 	if is_camera_motion:
 		camera_rotation = event.screen_relative * mouse_sensitivity
 
+# Eventos que não afetam a gameplay, como UI
 func _input(event: InputEvent) -> void:
 	if Input.is_action_just_pressed("ui_cancel"):
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 		
 	if Input.is_action_just_pressed("left_click"):
 		Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+
 
 func _physics_process(delta: float) -> void:
 	camera_pivot.rotation.x += camera_rotation.y * delta
@@ -42,10 +55,11 @@ func _physics_process(delta: float) -> void:
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 
-	is_jumping = Input.is_action_just_pressed("ui_accept") and is_on_floor()
+	is_jumping = Input.is_action_just_pressed("jump") and is_on_floor() and can_jump
 	# Handle jump.
 	if is_jumping:
 		velocity.y = JUMP_VELOCITY
+
 
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.
@@ -74,5 +88,8 @@ func _physics_process(delta: float) -> void:
 	# Personagem sempre olha para a frente da câmera
 	if camera_forward.length() > 0.001:
 		var target_angle := Vector3.BACK.signed_angle_to(camera_forward, Vector3.UP)
-		var cur_angle := dino_skin.global_rotation.y
-		dino_skin.global_rotation.y = lerp_angle(cur_angle, target_angle, 10.0 * delta)
+		var cur_angle := character_skin.global_rotation.y
+		character_skin.global_rotation.y = lerp_angle(cur_angle, target_angle, 10.0 * delta)
+	
+	# Habilidade
+	
