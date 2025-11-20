@@ -13,6 +13,8 @@ var mouse_sensitivity : float = 0.15
 var camera_rotation : Vector2 = Vector2.ZERO
 var last_movement_dir := Vector3.BACK
 var is_jumping
+var is_double_jump
+var can_double_jump := true
 
 func _ready() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -38,15 +40,24 @@ func _physics_process(delta: float) -> void:
 	
 	camera_rotation = Vector2.ZERO
 	
+	if is_on_floor():
+		can_double_jump = true
+	
 	# Add the gravity.
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 
 	is_jumping = Input.is_action_just_pressed("ui_accept") and is_on_floor()
+	is_double_jump = Input.is_action_just_pressed("ui_accept") and not is_on_floor() and can_double_jump
+	
 	# Handle jump.
 	if is_jumping:
 		velocity.y = JUMP_VELOCITY
-
+		
+	if is_double_jump:
+		velocity.y=JUMP_VELOCITY
+		can_double_jump = false
+	
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.
 	var input_dir := Input.get_vector("move_left", "move_right", "move_forward", "move_back")
