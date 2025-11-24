@@ -1,6 +1,6 @@
 extends CharacterBody3D
 
-
+var SPEED_BASE = 5.0
 var SPEED = 5.0
 var JUMP_VELOCITY = 4.5
 const ACCELERATION = 15
@@ -12,18 +12,21 @@ const ACCELERATION = 15
 var mouse_sensitivity : float = 0.15
 var camera_rotation : Vector2 = Vector2.ZERO
 var last_movement_dir := Vector3.BACK
+var can_run := true
 var can_jump := true
+var can_double_jump := true
 var is_jumping
+var is_double_jump
 
 func handle_press_skills():
 	if Input.is_action_just_pressed("first_skill"):
 		can_jump = false
+		print("Primeira skill")
 		#usar_skill_1()
 
-
-
-
-
+func handle_hold_skills():
+	if Input.is_action_pressed("run"):
+		SPEED = SPEED_BASE + 10
 
 func _ready() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -50,16 +53,24 @@ func _physics_process(delta: float) -> void:
 	camera_pivot.rotation.y -= camera_rotation.x * delta
 	
 	camera_rotation = Vector2.ZERO
+
+	if is_on_floor():
+		can_double_jump = true
 	
 	# Add the gravity.
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 
 	is_jumping = Input.is_action_just_pressed("jump") and is_on_floor() and can_jump
+	is_double_jump = Input.is_action_just_pressed("jump") and not is_on_floor() and can_double_jump
+
 	# Handle jump.
 	if is_jumping:
 		velocity.y = JUMP_VELOCITY
-
+	
+	if is_double_jump:
+		velocity.y=JUMP_VELOCITY
+		can_double_jump = false
 
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.
@@ -80,6 +91,7 @@ func _physics_process(delta: float) -> void:
 	velocity.y = y_velocity
 	
 	move_and_slide()
+	
 	# Direção da frente da câmera (sem inclinação)
 	var camera_forward := -camera.global_transform.basis.z
 	camera_forward.y = 0
@@ -92,4 +104,5 @@ func _physics_process(delta: float) -> void:
 		character_skin.global_rotation.y = lerp_angle(cur_angle, target_angle, 10.0 * delta)
 	
 	# Habilidade
-	
+	handle_press_skills()
+	handle_hold_skills()
