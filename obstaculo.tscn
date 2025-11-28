@@ -1,4 +1,10 @@
-[gd_scene load_steps=3 format=3 uid="uid://57od6pb2cnj7"]
+[gd_scene load_steps=5 format=3 uid="uid://57od6pb2cnj7"]
+
+[ext_resource type="Texture2D" uid="uid://gqir0kkrc47m" path="res://textures/object.png" id="1_q7004"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_phkyr"]
+albedo_texture = ExtResource("1_q7004")
+uv1_triplanar = true
 
 [sub_resource type="BoxMesh" id="BoxMesh_81phd"]
 size = Vector3(18, 1, 1)
@@ -9,6 +15,7 @@ size = Vector3(18, 1, 1)
 [node name="obstaculo" type="StaticBody3D"]
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+material_override = SubResource("StandardMaterial3D_phkyr")
 mesh = SubResource("BoxMesh_81phd")
 skeleton = NodePath("../..")
 
