@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://bveu135dey1hq"
-path="res://.godot/imported/gato.glb-6c649c706dd02bcda652d539f2c8b443.scn"
+path="res://.godot/imported/gato.glb-f466a05117aa811f3127b4f5ed2e8ca0.scn"
 
 [deps]
 
-source_file="res://actors/gato.glb"
-dest_files=["res://.godot/imported/gato.glb-6c649c706dd02bcda652d539f2c8b443.scn"]
+source_file="res://player/Characters/gato/gato.glb"
+dest_files=["res://.godot/imported/gato.glb-f466a05117aa811f3127b4f5ed2e8ca0.scn"]
 
 [params]
 

@@ -1,35 +1,33 @@
 extends CharacterBody3D
 
-var SPEED_BASE = 5.0
-var SPEED = 5.0
-var JUMP_VELOCITY = 4.5
-const ACCELERATION = 15
+@export var new_player_stats : PlayerStats
 
-@onready var camera_pivot: Node3D = $camera_pivot
-@onready var camera: Camera3D = $camera_pivot/SpringArm3D/camera
-@onready var character_skin: Node3D = $character
+@export var camera_pivot: Node3D
+@export var camera: Camera3D
+@export var character_skin: Node3D
 
 var mouse_sensitivity : float = 0.15
 var camera_rotation : Vector2 = Vector2.ZERO
 var last_movement_dir := Vector3.BACK
-var can_run := true
-var can_jump := true
-var can_double_jump := true
 var is_jumping
 var is_double_jump
 
 func handle_press_skills():
-	if Input.is_action_just_pressed("first_skill"):
-		can_jump = false
+	if Input.is_action_just_pressed("skill_e"):
+		new_player_stats.can_jump = false
 		print("Primeira skill")
 		#usar_skill_1()
 
 func handle_hold_skills():
 	if Input.is_action_pressed("run"):
-		SPEED = SPEED_BASE + 10
+		new_player_stats.speed = new_player_stats.speed_base + 10
+	if Input.is_action_just_released("skill_right_click"):
+		print(new_player_stats.nickname ," usou ", new_player_stats.habilidades[0].name)
 
+# Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	new_player_stats.scream("O Allossauro chegou!")
 
 func _unhandled_input(event: InputEvent) -> void:
 	var is_camera_motion := (
@@ -55,22 +53,22 @@ func _physics_process(delta: float) -> void:
 	camera_rotation = Vector2.ZERO
 
 	if is_on_floor():
-		can_double_jump = true
+		new_player_stats.can_double_jump = true
 	
 	# Add the gravity.
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 
-	is_jumping = Input.is_action_just_pressed("jump") and is_on_floor() and can_jump
-	is_double_jump = Input.is_action_just_pressed("jump") and not is_on_floor() and can_double_jump
+	is_jumping = Input.is_action_just_pressed("jump") and is_on_floor() and new_player_stats.can_jump
+	is_double_jump = Input.is_action_just_pressed("jump") and not is_on_floor() and new_player_stats.can_double_jump
 
 	# Handle jump.
 	if is_jumping:
-		velocity.y = JUMP_VELOCITY
+		velocity.y = new_player_stats.jump_height
 	
 	if is_double_jump:
-		velocity.y=JUMP_VELOCITY
-		can_double_jump = false
+		velocity.y=new_player_stats.jump_height
+		new_player_stats.can_double_jump = false
 
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.
@@ -84,9 +82,9 @@ func _physics_process(delta: float) -> void:
 	velocity.y = 0.0
 	
 	if direction:
-		velocity = velocity.move_toward(direction * SPEED, ACCELERATION * delta)
+		velocity = velocity.move_toward(direction * new_player_stats.speed, new_player_stats.acceleration * delta)
 	else:
-		velocity = velocity.move_toward(Vector3.ZERO, ACCELERATION * delta)
+		velocity = velocity.move_toward(Vector3.ZERO, new_player_stats.acceleration * delta)
 	
 	velocity.y = y_velocity
 	

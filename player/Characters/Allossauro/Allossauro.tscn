@@ -1,0 +1,33 @@
+[gd_scene load_steps=5 format=3 uid="uid://n3oeqkmfvhmw"]
+
+[ext_resource type="Script" uid="uid://b7m5tytsp05yi" path="res://scripts/Characters/CharacterController.gd" id="1_1yqc4"]
+[ext_resource type="PackedScene" uid="uid://bveu135dey1hq" path="res://player/Characters/gato/gato.glb" id="2_1yqc4"]
+[ext_resource type="Resource" uid="uid://dcbb0tckv6t8w" path="res://player/Characters/Allossauro/AllossauroStats.tres" id="2_2xoug"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_d5lh8"]
+radius = 0.44921875
+height = 2.0976563
+
+[node name="Allosauro" type="CharacterBody3D" node_paths=PackedStringArray("camera_pivot", "camera", "character_skin")]
+collision_layer = 2
+script = ExtResource("1_1yqc4")
+new_player_stats = ExtResource("2_2xoug")
+camera_pivot = NodePath("camera_pivot")
+camera = NodePath("camera_pivot/SpringArm3D/camera")
+character_skin = NodePath("character")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.99999994, 0, 0, 0, 0.99999994, 0, -0.098664045, 0)
+shape = SubResource("CapsuleShape3D_d5lh8")
+
+[node name="camera_pivot" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.9659258, 0.25881904, 0, -0.25881904, 0.9659258, 0, 1.8738751, 0)
+
+[node name="SpringArm3D" type="SpringArm3D" parent="camera_pivot"]
+spring_length = 4.5
+
+[node name="camera" type="Camera3D" parent="camera_pivot/SpringArm3D"]
+transform = Transform3D(1, 0, 0, 0, 1.0000001, 0, 0, 0, 1.0000001, 0, 0, 0)
+
+[node name="character" parent="." instance=ExtResource("2_1yqc4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.1167645, 0)

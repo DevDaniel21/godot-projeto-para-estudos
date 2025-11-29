@@ -1,8 +1,9 @@
-[gd_scene load_steps=10 format=3 uid="uid://cf5bdg5jw1tmi"]
+[gd_scene load_steps=11 format=3 uid="uid://cf5bdg5jw1tmi"]
 
-[ext_resource type="PackedScene" uid="uid://57od6pb2cnj7" path="res://obstaculo.tscn" id="1_qtpbo"]
-[ext_resource type="Texture2D" uid="uid://bqbtsmq82hdno" path="res://textures/floor.png" id="1_rxlph"]
-[ext_resource type="PackedScene" uid="uid://n3oeqkmfvhmw" path="res://player/alossauro/Allossauro.tscn" id="3_qtpbo"]
+[ext_resource type="Texture2D" uid="uid://bqbtsmq82hdno" path="res://textures/floor.png" id="1_p7a7i"]
+[ext_resource type="PackedScene" uid="uid://57od6pb2cnj7" path="res://objects/obstaculo.tscn" id="2_g8kdo"]
+[ext_resource type="PackedScene" uid="uid://n3oeqkmfvhmw" path="res://player/Characters/Allossauro/Allossauro.tscn" id="3_1oaea"]
+[ext_resource type="PackedScene" uid="uid://dd25cflhtmd4s" path="res://player/Characters/Allossauro/Skills/Parabola.tscn" id="4_g8kdo"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_81phd"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -18,7 +19,7 @@ tonemap_mode = 2
 glow_enabled = true
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ulv8f"]
-albedo_texture = ExtResource("1_rxlph")
+albedo_texture = ExtResource("1_p7a7i")
 uv1_triplanar = true
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_ulv8f"]
@@ -48,11 +49,14 @@ skeleton = NodePath("../..")
 [node name="CollisionShape3D" type="CollisionShape3D" parent="map/floor"]
 shape = SubResource("WorldBoundaryShape3D_d5lh8")
 
-[node name="obstaculo" parent="map" instance=ExtResource("1_qtpbo")]
+[node name="obstaculo" parent="map" instance=ExtResource("2_g8kdo")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -7.027)
 
-[node name="obstaculo2" parent="map" instance=ExtResource("1_qtpbo")]
+[node name="obstaculo2" parent="map" instance=ExtResource("2_g8kdo")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -9.236)
 
-[node name="Allosauro" parent="." instance=ExtResource("3_qtpbo")]
+[node name="Allosauro" parent="." instance=ExtResource("3_1oaea")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.1343763, 0)
+
+[node name="Path3D" parent="." instance=ExtResource("4_g8kdo")]
+transform = Transform3D(-0.084234364, 0, 0.99644595, 0, 1, 0, -0.99644595, 0, -0.084234364, -2.8227434, 1.1425099, -5.320874)
