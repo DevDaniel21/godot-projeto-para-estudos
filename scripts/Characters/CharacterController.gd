@@ -22,7 +22,8 @@ func handle_hold_skills():
 	if Input.is_action_pressed("run"):
 		new_player_stats.speed = new_player_stats.speed_base + 10
 	if Input.is_action_just_released("skill_right_click"):
-		print(new_player_stats.nickname ," usou ", new_player_stats.habilidades[0].name)
+		print(new_player_stats.nickname ," usou ", new_player_stats.habilidades[1].name)
+		new_player_stats.habilidades[1].executar($".", camera)
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -57,7 +58,10 @@ func _physics_process(delta: float) -> void:
 	
 	# Add the gravity.
 	if not is_on_floor():
-		velocity += get_gravity() * delta
+		var grav = get_gravity()
+		if velocity.y < 0:
+			grav *= 4.5   # cai mais rápido
+		velocity += grav * delta
 
 	is_jumping = Input.is_action_just_pressed("jump") and is_on_floor() and new_player_stats.can_jump
 	is_double_jump = Input.is_action_just_pressed("jump") and not is_on_floor() and new_player_stats.can_double_jump

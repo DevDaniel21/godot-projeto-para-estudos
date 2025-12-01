@@ -8,5 +8,5 @@ class_name Skill
 @export var cooldown : int
 @export_flags("skill_right_click", "skill_space", "skill_e", "skill_shift") var tecla
 
-func executar(_character):
+func executar(_character, camera = null):
 	pass

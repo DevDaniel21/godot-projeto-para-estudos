@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="Bote" load_steps=2 format=3 uid="uid://kv6aqvqjpaj0"]
+
+[ext_resource type="Script" uid="uid://ph12bwa8u1le" path="res://player/Characters/Allossauro/Skills/Bote.gd" id="1_a5s13"]
+
+[resource]
+script = ExtResource("1_a5s13")
+velocity_x = 20.0
+velocity_y = 10.0
+name = "Bote do Caçador"
+description = "Dá um salto"
+tecla = 2
+metadata/_custom_type_script = "uid://ph12bwa8u1le"
